@@ -1,0 +1,58 @@
+{
+	"name": "aiexport",
+	"displayName": "AIExport",
+	"description": "Smart file exporter for AI – select, filter, strip comments, and export with stats.",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
+	"engines": {
+		"vscode": "^1.105.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./extension.js",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "aiexport-sidebar",
+					"title": "AIExport",
+					"icon": "$(files)"
+				}
+			]
+		},
+		"views": {
+			"aiexport-sidebar": [
+				{
+					"type": "webview",
+					"id": "aiexport.sidebarView",
+					"name": "AIExport"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "aiexport.exportSelected",
+				"title": "AIExport: Export Selected Files"
+			},
+			{
+				"command": "aiexport.refresh",
+				"title": "AIExport: Refresh File Tree"
+			}
+		]
+	},
+	"scripts": {
+		"lint": "biome lint .",
+		"pretest": "bun run lint",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.15",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^22.19.19",
+		"@types/vscode": "1.105.0",
+		"@vscode/test-cli": "^0.0.12",
+		"@vscode/test-electron": "^2.5.2"
+	}
+}
