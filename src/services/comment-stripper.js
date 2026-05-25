@@ -48,7 +48,6 @@ class CommentStripper {
 		let templateDepth = 0;
 
 		while (i < len) {
-			// Handle string literals – don't strip inside strings
 			if (!inString && !inTemplateString) {
 				if (chars[i] === '"' || chars[i] === "'") {
 					inString = true;
@@ -73,10 +72,8 @@ class CommentStripper {
 						i + syntax.blockStart.length,
 					);
 					if (endIdx === -1) {
-						// Unterminated block comment – skip rest
 						break;
 					}
-					// Preserve newlines to keep line numbers stable
 					const skipped = chars.slice(i, endIdx + syntax.blockEnd.length);
 					const newlines = (skipped.match(/\n/g) || []).length;
 					result += "\n".repeat(newlines);
