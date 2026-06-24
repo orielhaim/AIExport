@@ -29,10 +29,10 @@ jobs:
       - name: Get Version from package.json
         id: get_version
         run: |
-          VERSION=$(node -e "import('./package.json', { assert: { type: 'json' } }).then(pkg => console.log(pkg.default.version))")
+          VERSION=$(bun -e "import pkg from './package.json' with { type: 'json' }; console.log(pkg.version);")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Create GitHub Release Draft
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.VERSION }}
