@@ -1,0 +1,44 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install VSCE globally
+        run: bun install -g @vscode/vsce
+
+      - name: Package Extension
+        run: vsce package -o aiexport.vsix
+
+      - name: Get Version from package.json
+        id: get_version
+        run: |
+          VERSION=$(node -e "import('./package.json', { assert: { type: 'json' } }).then(pkg => console.log(pkg.default.version))")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release Draft
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
+          draft: true
+          prerelease: false
+          files: aiexport.vsix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
